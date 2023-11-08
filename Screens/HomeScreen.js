@@ -17,7 +17,6 @@ import bookmark from "../assets/bookmarks.png";
 import playlist from "../assets/playlist.png";
 import up from "../assets/up.png";
 import down from "../assets/down.png";
-import clock from "../assets/clock.png";
 import arrow from "../assets/arrow.png";
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
@@ -44,11 +43,10 @@ const HomeScreen = () => {
         "https://cross-platform.rp.devfactory.com/for_you"
       );
       const data = await response.json();
-      // console.log(data);
+      setIsCheckAnswer(false);
       setMcq(data);
       setQuesId(data["id"]);
       setAnswers(data["options"]);
-      console.log(data);
     } catch (error) {
       console.log("Error " + error);
     }
@@ -70,7 +68,6 @@ const HomeScreen = () => {
       setRtAnsId(rightAnswer[0]["id"]);
       setTimeout(() => {
         LoadQuestion();
-        setIsCheckAnswer(false);
       }, 1000);
     } catch (error) {
       console.log("Error " + error);
@@ -123,7 +120,7 @@ const HomeScreen = () => {
             >
               <View style={{ width: 80, flex: 1 }}>
                 {answers &&
-                  answers.map((item, i) => {
+                  answers.map((item, id) => {
                     return (
                       <Text
                         style={[
@@ -136,8 +133,9 @@ const HomeScreen = () => {
                             : styles.answer,
                         ]}
                         onPress={() => {
-                          checkAnswer(item?.["id"]);
+                          !isCheckAnswer && checkAnswer(item?.["id"]);
                         }}
+                        key={id}
                       >
                         {answers && item?.answer}
                         {item?.id == choseAnsId &&
